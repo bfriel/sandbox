@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PublicKey } from '@solana/web3.js';
 
-import { TLog } from '../../types';
+import { BtcAccount, TLog } from '../../types';
 
 import { BLACK, GRAY } from '../../constants';
 
@@ -47,7 +46,7 @@ const Row = styled.div`
 // =============================================================================
 
 interface Props {
-  publicKey: PublicKey | null;
+  connectedAccount: BtcAccount[];
   logs: TLog[];
   clearLogs: () => void;
 }
@@ -57,7 +56,7 @@ interface Props {
 // =============================================================================
 
 const Logs = React.memo((props: Props) => {
-  const { publicKey, logs, clearLogs } = props;
+  const { connectedAccount, logs, clearLogs } = props;
 
   return (
     <StyledSection>
@@ -72,7 +71,7 @@ const Logs = React.memo((props: Props) => {
         <Row>
           <span>{'>'}</span>
           <PlaceholderMessage>
-            {publicKey ? (
+            {connectedAccount.length > 0 ? (
               // connected
               <>
                 Click a button and watch magic happen...{' '}

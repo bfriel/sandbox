@@ -1,39 +1,22 @@
-import { PublicKey, Transaction, VersionedTransaction, SendOptions } from '@solana/web3.js';
+type PhantomEvent = 'accountsChanged' | 'chainChanged';
 
-type DisplayEncoding = 'utf8' | 'hex';
+type PhantomRequestMethod = 'requestAccounts' | 'signMessage' | 'signPSBT';
 
-type PhantomEvent = 'connect' | 'disconnect' | 'accountChanged';
-
-type PhantomRequestMethod =
-  | 'connect'
-  | 'disconnect'
-  | 'signAndSendTransaction'
-  | 'signAndSendTransactionV0'
-  | 'signAndSendTransactionV0WithLookupTable'
-  | 'signTransaction'
-  | 'signAllTransactions'
-  | 'signMessage';
-
-interface ConnectOpts {
-  onlyIfTrusted: boolean;
-}
-
+export type BtcAccount = {
+  address: string;
+  publicKey: string;
+};
 export interface PhantomProvider {
-  publicKey: PublicKey | null;
-  isConnected: boolean | null;
-  signAndSendTransaction: (
-    transaction: Transaction | VersionedTransaction,
-    opts?: SendOptions
-  ) => Promise<{ signature: string; publicKey: PublicKey }>;
-  signTransaction: (transaction: Transaction | VersionedTransaction) => Promise<Transaction | VersionedTransaction>;
-  signAllTransactions: (
-    transactions: (Transaction | VersionedTransaction)[]
-  ) => Promise<(Transaction | VersionedTransaction)[]>;
-  signMessage: (message: Uint8Array | string, display?: DisplayEncoding) => Promise<any>;
-  connect: (opts?: Partial<ConnectOpts>) => Promise<{ publicKey: PublicKey }>;
-  disconnect: () => Promise<void>;
+  isPhantom: boolean;
   on: (event: PhantomEvent, handler: (args: any) => void) => void;
-  request: (method: PhantomRequestMethod, params: any) => Promise<unknown>;
+  requestAccounts: () => Promise<BtcAccount[]>;
+  signMessage: (message: Uint8Array) => Promise<{ signedMessage: Uint8Array; signature: Uint8Array }>;
+  signPSBT(
+    psbtHex: string,
+    options: {
+      autoFinalize: boolean;
+    }
+  ): Promise<string>;
 }
 
 export type Status = 'success' | 'warning' | 'error' | 'info';

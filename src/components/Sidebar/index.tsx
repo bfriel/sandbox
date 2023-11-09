@@ -1,5 +1,4 @@
 import React from 'react';
-import { PublicKey } from '@solana/web3.js';
 import styled from 'styled-components';
 
 import { GRAY, REACT_GRAY, PURPLE, WHITE, DARK_GRAY } from '../../constants';
@@ -8,6 +7,7 @@ import { hexToRGB } from '../../utils';
 
 import Button from '../Button';
 import { ConnectedMethods } from '../../App';
+import { BtcAccount } from '../../types';
 
 // =============================================================================
 // Styled Components
@@ -74,6 +74,7 @@ const Badge = styled.div`
   background-color: ${hexToRGB(PURPLE, 0.2)};
   font-size: 14px;
   border-radius: 6px;
+  margin-top: 7px;
   @media (max-width: 400px) {
     width: 280px;
     white-space: nowrap;
@@ -135,7 +136,7 @@ const Tag = styled.p`
 // =============================================================================
 
 interface Props {
-  publicKey?: PublicKey;
+  connectedAccount: BtcAccount[];
   connectedMethods: ConnectedMethods[];
   connect: () => Promise<void>;
 }
@@ -145,7 +146,7 @@ interface Props {
 // =============================================================================
 
 const Sidebar = React.memo((props: Props) => {
-  const { publicKey, connectedMethods, connect } = props;
+  const { connectedAccount, connectedMethods, connect } = props;
 
   return (
     <Main>
@@ -154,12 +155,14 @@ const Sidebar = React.memo((props: Props) => {
           <img src="https://phantom.app/img/phantom-logo.svg" alt="Phantom" width="200" />
           <Subtitle>CodeSandbox</Subtitle>
         </Link>
-        {publicKey ? (
+        {connectedAccount.length > 0 ? (
           // connected
           <>
             <div>
               <Pre>Connected as</Pre>
-              <Badge>{publicKey.toBase58()}</Badge>
+              {connectedAccount.map(({ address, publicKey }) => (
+                <Badge key={address}>{address}</Badge>
+              ))}
               <Divider />
             </div>
             {connectedMethods.map((method, i) => (
