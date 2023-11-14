@@ -136,7 +136,7 @@ const Tag = styled.p`
 // =============================================================================
 
 interface Props {
-  connectedAccount: BtcAccount[];
+  connectedAccounts: BtcAccount[];
   connectedMethods: ConnectedMethods[];
   connect: () => Promise<void>;
 }
@@ -146,21 +146,21 @@ interface Props {
 // =============================================================================
 
 const Sidebar = React.memo((props: Props) => {
-  const { connectedAccount, connectedMethods, connect } = props;
+  const { connectedAccounts, connectedMethods, connect } = props;
 
   return (
     <Main>
       <Body>
         <Link>
-          <img src="https://phantom.app/img/phantom-logo.svg" alt="Phantom" width="200" />
+          <img src="/Phantom-Logo-Purple.svg" alt="Phantom" width="200" />
           <Subtitle>CodeSandbox</Subtitle>
         </Link>
-        {connectedAccount.length > 0 ? (
+        {connectedAccounts.length > 0 ? (
           // connected
           <>
             <div>
               <Pre>Connected as</Pre>
-              {connectedAccount.map(({ address, publicKey }) => (
+              {connectedAccounts.map(({ address }) => (
                 <Badge key={address}>{address}</Badge>
               ))}
               <Divider />

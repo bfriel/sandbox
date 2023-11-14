@@ -9,12 +9,13 @@ import { PhantomProvider } from '../types';
 
 const signMessage = async (
   provider: PhantomProvider,
+  address: string,
   message: string
-): Promise<{ signedMessage: Uint8Array; signature: Uint8Array }> => {
+): Promise<{ signature: Uint8Array }> => {
   try {
     const encodedMessage = new TextEncoder().encode(message);
-    const signedMessage = await provider.signMessage(encodedMessage);
-    return signedMessage;
+    const result = await provider.signMessage(address, encodedMessage);
+    return result;
   } catch (error) {
     console.warn(error);
     throw new Error(error.message);

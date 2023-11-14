@@ -46,7 +46,7 @@ const Row = styled.div`
 // =============================================================================
 
 interface Props {
-  connectedAccount: BtcAccount[];
+  connectedAccounts: BtcAccount[];
   logs: TLog[];
   clearLogs: () => void;
 }
@@ -56,7 +56,7 @@ interface Props {
 // =============================================================================
 
 const Logs = React.memo((props: Props) => {
-  const { connectedAccount, logs, clearLogs } = props;
+  const { connectedAccounts, logs, clearLogs } = props;
 
   return (
     <StyledSection>
@@ -71,7 +71,7 @@ const Logs = React.memo((props: Props) => {
         <Row>
           <span>{'>'}</span>
           <PlaceholderMessage>
-            {connectedAccount.length > 0 ? (
+            {connectedAccounts.length > 0 ? (
               // connected
               <>
                 Click a button and watch magic happen...{' '}

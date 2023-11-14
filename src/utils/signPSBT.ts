@@ -1,15 +1,22 @@
 import { PhantomProvider } from '../types';
+import fromHexString from './fromHexString';
 
 /**
  * Signs a message
  * @param   {PhantomProvider} provider a Phantom Provider
  * @param   {String}          psbtHex  a PSBT encoded as HEX
- * @returns {Any}                      TODO(get type)
+ * @returns {String}                   a signed PSBT
  */
 
-const signPSBT = async (provider: PhantomProvider, psbtHex: string): Promise<string> => {
+const signPSBT = async (provider: PhantomProvider, psbtHex: string, address: string): Promise<string> => {
   try {
-    const signedPSBT = await provider.signPSBT(psbtHex, { autoFinalize: true });
+    const signedPSBT = await provider.signPSBT(fromHexString(psbtHex), [
+      {
+        address,
+        signingIndexes: [0, 1, 3],
+        sigHash: 0,
+      },
+    ]);
     return signedPSBT;
   } catch (error) {
     console.warn(error);
